@@ -9,7 +9,6 @@
 
 <h2>Welcome to <span th:text="${user.username}"></span> 's profile</h2>
 
-<form th:action="@{/posts}" method="get">
     <div class="card" style="width: 18rem;">
         <img class="card-img-top" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Card image cap">
         <div class="card-body">
@@ -17,19 +16,8 @@
             <p th:text="${user.lastName}" class="card-text"></p>
             <p th:text="${user.dateOfBirth}" class="card-text"></p>
             <p th:text="${user.bio}" class="card-text"></p>
-            <button type="submit" th:name="action" th:value="in">Add Post</button>
         </div>
     </div>
-</form>
-<div th:each="post:${user.posts}" class="album">
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Post</h5>
-            <h6 th:text="${post.createdAt}" class="card-subtitle mb-2 text-muted"></h6>
-            <p th:text="${post.body}" class="card-text"></p>
-        </div>
-    </div>
-</div>
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Sign Out"/>
 </form>

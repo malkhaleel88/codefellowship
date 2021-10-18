@@ -34,7 +34,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public RedirectView attemptSignUp(@ModelAttribute ApplicationUser user) {
-        user.setDateOfBirth(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = applicationUserRepository.save(user);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
@@ -46,7 +46,6 @@ public class UserController {
     public String login() {
         return "login";
     }
-
     @PostMapping ("/login")
     public RedirectView LoginPage(@RequestParam String username) {
         ApplicationUser user = applicationUserRepository.findApplicationUserByUsername(username);
@@ -54,6 +53,10 @@ public class UserController {
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return new RedirectView("/home");
+    }
+    @GetMapping("/home")
+    public String gethome(){
+        return "index";
     }
 
     @GetMapping("/profile")
