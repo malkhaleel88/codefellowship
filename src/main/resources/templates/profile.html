@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Profile Page</title>
+</head>
+<body>
+
+<h2>Welcome to <span th:text="${user.username}"></span> 's profile</h2>
+
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Card image cap">
+        <div class="card-body">
+            <p th:text="${user.firstName}" class="card-text"></p>
+            <p th:text="${user.lastName}" class="card-text"></p>
+            <p th:text="${user.dateOfBirth}" class="card-text"></p>
+            <p th:text="${user.bio}" class="card-text"></p>
+        </div>
+    </div>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+</body>
+</html>
+
+
+
+
+
