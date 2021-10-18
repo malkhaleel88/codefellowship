@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class ApplicationUser implements UserDetails {
@@ -14,12 +15,18 @@ public class ApplicationUser implements UserDetails {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(unique = true)
     private String username;
+
     private String password;
     private String firstName;
     private String lastName;
     private String dateOfBirth;
     private String bio;
+
+
+    @OneToMany(mappedBy = "applicationuser")
+    private List<Post> post;
 
     public ApplicationUser() {
     }
@@ -29,10 +36,25 @@ public class ApplicationUser implements UserDetails {
         this.password = password;
     }
 
+    public List<Post> getPost() {
+        return post;
+    }
+
+    public void setPost(List<Post> post) {
+        this.post = post;
+    }
+
     public Long getId() {
         return id;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getFirstName() {
         return firstName;
