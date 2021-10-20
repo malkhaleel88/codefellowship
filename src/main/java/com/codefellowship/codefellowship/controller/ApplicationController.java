@@ -79,7 +79,6 @@ public class ApplicationController {
     public RedirectView addPosts(@ModelAttribute Post posts) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ApplicationUser user = applicationUserRepository.findApplicationUserByUsername(userDetails.getUsername());
-        System.out.println(userDetails.getUsername());
         posts.setApplicationUser(user);
         applicationUserRepository.save(user);
         postRepository.save(posts);
@@ -89,7 +88,7 @@ public class ApplicationController {
 
     @GetMapping("/profile/{id}")
     public String getProfilePageById(@PathVariable String id , Model model) {
-        long Id= Long.parseLong(id);
+        long Id = Long.parseLong(id);
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ApplicationUser user = applicationUserRepository.findApplicationUserById(Id);
         model.addAttribute("user", user);
