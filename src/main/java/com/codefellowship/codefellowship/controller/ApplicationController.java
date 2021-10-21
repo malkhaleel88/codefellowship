@@ -29,7 +29,7 @@ public class ApplicationController {
     PostRepository postRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+     PasswordEncoder passwordEncoder;
 
 
 
@@ -39,9 +39,9 @@ public class ApplicationController {
     }
 
     @PostMapping("/signup")
-    public RedirectView attemptSignUp(@ModelAttribute ApplicationUser user) {
+    public RedirectView attemptSignUp(ApplicationUser user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user = applicationUserRepository.save(user);
+        applicationUserRepository.save(user);
         return new RedirectView("/login");
     }
 
@@ -55,21 +55,23 @@ public class ApplicationController {
         ApplicationUser user = applicationUserRepository.findApplicationUserByUsername(username);
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new RedirectView("/home");
+        return new RedirectView("/");
     }
 
     @GetMapping("/profile")
     public String getProfilePage(Model model) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ApplicationUser user = applicationUserRepository.findApplicationUserByUsername(userDetails.getUsername());
-        model.addAttribute("user", user);
+        List<Post> list = postRepository.findAllByUserId(user.getId()).orElseThrow();
+        model.addAttribute("users", user);
+        model.addAttribute("posts", list);
         return "profile";
     }
 
     @GetMapping("/posts")
     public String getPosts(@ModelAttribute Post posts, Model model){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Post> post = postRepository.findAllByUserUsername(userDetails.getUsername());
+        List<Post> post = postRepository.findAllByUser_Username(userDetails.getUsername()).orElseThrow();
         model.addAttribute("posts", post);
 
         return "post";
@@ -79,7 +81,7 @@ public class ApplicationController {
     public RedirectView addPosts(@ModelAttribute Post posts) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ApplicationUser user = applicationUserRepository.findApplicationUserByUsername(userDetails.getUsername());
-        posts.setApplicationUser(user);
+        posts.setUser(user);
         applicationUserRepository.save(user);
         postRepository.save(posts);
         user.setPosts(Collections.singletonList(posts));
@@ -89,10 +91,10 @@ public class ApplicationController {
     @GetMapping("/profile/{id}")
     public String getProfilePageById(@PathVariable String id , Model model) {
         long Id = Long.parseLong(id);
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ApplicationUser user = applicationUserRepository.findApplicationUserById(Id);
+        List<Post> list = postRepository.findAllByUserId(user.getId()).orElseThrow();
         model.addAttribute("user", user);
-
+        model.addAttribute("posts", list);
         return "oneUser";
     }
 }
