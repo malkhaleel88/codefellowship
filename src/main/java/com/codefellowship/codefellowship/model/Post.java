@@ -16,29 +16,39 @@ public class Post {
     private Long id;
 
 
-    String body;
+   private String body;
 
     @CreationTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
-    private LocalDateTime createAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private ApplicationUser applicationUser;
+    @JoinColumn(name="user_id")
+    private ApplicationUser user;
 
     public Post() {
     }
 
-    public Post(String body, LocalDateTime createAt, ApplicationUser applicationUser) {
+    public Post(String body) {
         this.body = body;
-        this.createAt = createAt;
-        this.applicationUser = applicationUser;
+    }
+
+    public Post(String body, LocalDateTime createdAt) {
+        this.body = body;
+        this.createdAt = createdAt;
+    }
+
+    public Post(String body, LocalDateTime createdAt, ApplicationUser user) {
+        this.body = body;
+        this.createdAt = createdAt;
+        this.user = user;
     }
 
     public Long getId() {
         return id;
     }
+
 
     public void setId(Long id) {
         this.id = id;
@@ -52,19 +62,19 @@ public class Post {
         this.body = body;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
+    public void setCreatedAt(LocalDateTime createAt) {
+        this.createdAt = createAt;
     }
 
-    public ApplicationUser getApplicationUser() {
-        return applicationUser;
+    public ApplicationUser getUser() {
+        return user;
     }
 
-    public void setApplicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser;
+    public void setUser(ApplicationUser applicationUser) {
+        this.user = applicationUser;
     }
 }
