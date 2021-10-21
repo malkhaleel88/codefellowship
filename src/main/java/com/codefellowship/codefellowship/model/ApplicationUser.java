@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 
+
 @Entity
 public class ApplicationUser implements UserDetails {
 
@@ -25,10 +26,21 @@ public class ApplicationUser implements UserDetails {
     private String bio;
 
 
-    @OneToMany(mappedBy = "applicationUser")
-    List<Post> posts;
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
 
     public ApplicationUser() {
+    }
+
+    public ApplicationUser(Long id, String username, String password, String firstName, String lastName, String dateOfBirth, String bio, List<Post> posts) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.bio = bio;
+        this.posts = posts;
     }
 
     public ApplicationUser(String username, String password, String firstName, String lastName, String dateOfBirth, String bio) {
@@ -45,7 +57,9 @@ public class ApplicationUser implements UserDetails {
         this.password = password;
     }
 
-
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;
