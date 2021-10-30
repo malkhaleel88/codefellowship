@@ -18,6 +18,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ApplicationController {
@@ -68,6 +69,16 @@ public class ApplicationController {
         return "profile";
     }
 
+    @GetMapping("/profile/{id}")
+    public String getProfilePageById(@PathVariable String id , Model model) {
+        long Id = Long.parseLong(id);
+        ApplicationUser user = applicationUserRepository.findApplicationUserById(Id);
+        List<Post> list = postRepository.findAllByUserId(user.getId()).orElseThrow();
+        model.addAttribute("user", user);
+        model.addAttribute("posts", list);
+        return "oneUser";
+    }
+
     @GetMapping("/posts")
     public String getPosts(@ModelAttribute Post posts, Model model){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -88,13 +99,35 @@ public class ApplicationController {
         return new RedirectView("/profile") ;
     }
 
-    @GetMapping("/profile/{id}")
-    public String getProfilePageById(@PathVariable String id , Model model) {
-        long Id = Long.parseLong(id);
-        ApplicationUser user = applicationUserRepository.findApplicationUserById(Id);
-        List<Post> list = postRepository.findAllByUserId(user.getId()).orElseThrow();
+    @GetMapping("/users")
+    public String getUsersPage(Model model) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ApplicationUser user = applicationUserRepository.findApplicationUserByUsername(userDetails.getUsername());
+        List<ApplicationUser> users = applicationUserRepository.findAll();
         model.addAttribute("user", user);
-        model.addAttribute("posts", list);
-        return "oneUser";
+        model.addAttribute("users", users);
+        return "users";
     }
+
+    @PostMapping("/follow/{id}")
+    public RedirectView followUser(@PathVariable long id){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ApplicationUser user = applicationUserRepository.findApplicationUserByUsername(userDetails.getUsername());
+        ApplicationUser userFollow = applicationUserRepository.findApplicationUserById(id);
+
+        user.getFollowers().add(userFollow);
+        applicationUserRepository.save(user);
+        return new RedirectView("/users");
+    }
+
+
+    @GetMapping("/feed")
+    public String getFeedPage(Model model) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ApplicationUser user = applicationUserRepository.findApplicationUserByUsername(userDetails.getUsername());
+        Set<ApplicationUser> userFeed = user.getFollowers();
+        model.addAttribute("followers", userFeed);
+        return "feed";
+    }
+
 }

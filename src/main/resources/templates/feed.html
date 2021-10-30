@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns="http://www.w3.org/1999/xhtml"
+>
+<head>
+  <meta charset="UTF-8" />
+  <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+          crossorigin="anonymous"
+  />
+  <title>Feed page</title>
+</head>
+<body>
+<main>
+  <style>
+    body {
+      background-color: darkgray;
+    }
+  </style>
+  <h1>Feed Posts</h1>
+  <div class="cards">
+    <div
+            class="card border-danger mb-3"
+            style="width: 18rem"
+            th:each="follower:${followers}"
+    >
+      <div class="card-body">
+        <img
+                class="card-img-top"
+                src="https://ruminate.branhamroys.com/wp-content/uploads/2015/07/unknown.gif"
+                alt="Card image cap"
+        />
+        <h5 class="btn btn-outline-danger">Username:</h5>
+        <h2 class="card-title" th:text=" ${follower.getUsername}"></h2>
+        <a
+                th:href="@{/user(id = ${follower.id})}"
+                class="btn btn-secondary btn-sm"
+                role="button"
+                aria-pressed="true"
+        >Profile</a
+        ><br /><br />
+        <h5>Posts:</h5>
+        <ul>
+          <li th:each="post:${follower.posts}" th:text="${post.body}"></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
