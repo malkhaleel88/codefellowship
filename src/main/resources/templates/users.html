@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <meta charset="UTF-8" />
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+            crossorigin="anonymous"
+    />
+    <link rel="stylesheet" th:href="@{/CSS/style.css}" />
+
+    <title>Suggest Friends</title>
+</head>
+<body>
+<style>
+    body {
+        background-color: darkgray;
+    }
+</style>
+<main>
+    <h3>UserName: <span th:text="${user.getUsername()}"></span></h3>
+
+    <h1>People You May Know</h1>
+    <br />
+    <ul th:each="user: ${users}">
+        <a th:href="@{http://localhost:8080/user/(id=${user.id})}">
+            <img src="https://icons.iconarchive.com/icons/trayse101/photoshop-filetypes/256/profile-icon.png"
+             alt=""/>
+        </a>
+        <li th:text="${user.firstName+ ' ' + user.lastName}"></li>
+        <li th:text="${user.dateOfBirth}"></li>
+        <li th:text="${user.bio}"></li>
+        <form method="post" th:action="@{'/follow?id='+${user.id}}">
+            <button class="btn btn-danger" type="submit">Follow</button>
+        </form>
+        <a th:href="@{http://localhost:8080/user/(id=${user.id})}"> <button type="submit">Visit Profile</button></a>
+    </ul>
+</main>
+</body>
+</html>

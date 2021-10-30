@@ -29,4 +29,3 @@ The programing language used to build this project is Java and using the Spring 
 * ApplicationUserRepository
 
 * PostRepository
-
